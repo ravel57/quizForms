@@ -204,7 +204,11 @@ class ApiController(
 		@PathVariable groupId: Long,
 		@RequestBody body: Map<String, Any>,
 	): ResponseEntity<Any> {
-		return ResponseEntity.of(ProblemDetail.forStatus(HttpURLConnection.HTTP_NO_CONTENT)).build()
+		return if (questionsService.groupScoreChanged(groupId, body)) {
+			ResponseEntity.of(ProblemDetail.forStatus(HttpURLConnection.HTTP_NO_CONTENT)).build()
+		} else {
+			ResponseEntity.of(ProblemDetail.forStatus(HttpURLConnection.HTTP_BAD_REQUEST)).build()
+		}
 	}
 
 }

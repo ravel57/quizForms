@@ -174,4 +174,8 @@ class QuestionsRepository(
 		return jdbcTemplate.update("DELETE FROM answer WHERE question_id = $questionId AND id = $answerId") == 1
 	}
 
+	fun groupScoreChanged(groupId: Long, body: Map<String, Any>): Boolean {
+		return jdbcTemplate.update("") == 1
+	}
+
 }

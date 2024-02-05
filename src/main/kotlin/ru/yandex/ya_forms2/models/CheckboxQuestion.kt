@@ -32,7 +32,7 @@ data class CheckboxQuestion(
 	)
 
 	override fun isAnswerCorrect(): Boolean {
-		return correctAnswers == selectedAnswers
+		return selectedAnswers!!.any { it -> it.id in correctAnswers!!.map { it.id } }
 	}
 
 }

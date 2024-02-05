@@ -72,4 +72,8 @@ class QuestionsService(
 		return questionsRepository.deleteAnswer(questionId, answerId)
 	}
 
+	fun groupScoreChanged(groupId: Long, body: Map<String, Any>): Boolean {
+		return questionsRepository.groupScoreChanged(groupId, body)
+	}
+
 }
