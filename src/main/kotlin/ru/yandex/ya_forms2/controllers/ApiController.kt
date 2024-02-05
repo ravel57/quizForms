@@ -195,4 +195,16 @@ class ApiController(
 		}
 	}
 
+
+	@PatchMapping(
+		"/group/{groupId}/score",
+		"/group/{groupId}/score/"
+	)
+	fun patchGroupScore(
+		@PathVariable groupId: Long,
+		@RequestBody body: Map<String, Any>,
+	): ResponseEntity<Any> {
+		return ResponseEntity.of(ProblemDetail.forStatus(HttpURLConnection.HTTP_NO_CONTENT)).build()
+	}
+
 }

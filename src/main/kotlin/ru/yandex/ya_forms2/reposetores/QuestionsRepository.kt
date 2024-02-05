@@ -69,7 +69,7 @@ class QuestionsRepository(
 								id = it["id"] as Int,
 								text = it["text"].toString(),
 								isCorrect = it["is_correct"] as Boolean,
-								score = it["score"] as Int,
+								score = (it["score"] ?: 0) as Int,
 							)
 						)
 					}
