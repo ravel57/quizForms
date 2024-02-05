@@ -73,7 +73,7 @@ class QuestionsService(
 	}
 
 	fun groupScoreChanged(groupId: Long, body: Map<String, Any>): Boolean {
-		return questionsRepository.groupScoreChanged(groupId, body)
+		return questionsRepository.groupScoreChanged(groupId, body["score"] as Int)
 	}
 
 }

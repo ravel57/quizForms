@@ -22,7 +22,7 @@ data class CheckboxQuestion(
 			AnswerVariant(
 				id = (it as Map<*, *>)["id"] as Int,
 				text = it["text"] as String,
-				isCorrect = false,// it["is_correct"] as Boolean,
+				isCorrect = false, //(it["is_correct"] as Boolean) ?:
 				score = 0, //it["score"] as Int,
 			)
 		},
@@ -32,7 +32,7 @@ data class CheckboxQuestion(
 	)
 
 	override fun isAnswerCorrect(): Boolean {
-		return selectedAnswers!!.any { it -> it.id in correctAnswers!!.map { it.id } }
+		return selectedAnswers!!.any { it.id in correctAnswers!!.map { answerVariant -> answerVariant.id } }
 	}
 
 }
