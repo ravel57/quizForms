@@ -53,7 +53,7 @@ class QuestionsRepository(
 		val groupOfQuestion = GroupOfQuestion()
 		val session = sessionFactory.openSession()
 		session.beginTransaction()
-		session.save(groupOfQuestion)
+		session.persist(groupOfQuestion)
 		session.transaction.commit()
 		session.close()
 		return groupOfQuestion.id
@@ -65,7 +65,7 @@ class QuestionsRepository(
 		val groupOfQuestion = session.get(GroupOfQuestion::class.java, groupId)
 		session.beginTransaction()
 		groupOfQuestion.title = newTitle
-		session.update(groupOfQuestion)
+		session.merge(groupOfQuestion)
 		session.transaction.commit()
 		session.close()
 		return true
@@ -75,7 +75,7 @@ class QuestionsRepository(
 	fun deleteGroup(id: Long): Boolean {
 		val session = sessionFactory.openSession()
 		session.beginTransaction()
-		session.delete(session.get(GroupOfQuestion::class.java, id))
+		session.remove(session.get(GroupOfQuestion::class.java, id))
 		session.transaction.commit()
 		session.close()
 		return true
@@ -91,7 +91,7 @@ class QuestionsRepository(
 		val session = sessionFactory.openSession()
 		val groupOfQuestion = session.get(GroupOfQuestion::class.java, groupId)
 		val transaction = session.beginTransaction()
-		session.save(question)
+		session.persist(question)
 		groupOfQuestion.questions.add(question)
 		transaction.commit()
 		session.close()
@@ -103,7 +103,7 @@ class QuestionsRepository(
 		val question = session.get(GroupOfQuestion::class.java, groupId).questions.find { it.id == questionId }
 		session.beginTransaction()
 		question?.text = text
-		session.update(question)
+		session.merge(question)
 		session.transaction.commit()
 		session.close()
 		return true
@@ -123,7 +123,7 @@ class QuestionsRepository(
 		val session = sessionFactory.openSession()
 		val question = session.get(Question::class.java, questionId)
 		session.beginTransaction()
-		session.save(answer)
+		session.persist(answer)
 		question.answers.add(answer)
 		session.transaction.commit()
 		session.close()
@@ -137,7 +137,7 @@ class QuestionsRepository(
 		answerVariant?.text = text
 		answerVariant?.isCorrect = isCorrect
 		answerVariant?.score = score
-		session.update(answerVariant)
+		session.merge(answerVariant)
 		session.transaction.commit()
 		session.close()
 		return true
