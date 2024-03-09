@@ -1,4 +1,4 @@
-package ru.yandex.ya_forms2.configs
+package ru.ravel.quizforms.configs
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

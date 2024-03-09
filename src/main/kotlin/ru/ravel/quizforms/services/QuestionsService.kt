@@ -1,15 +1,20 @@
-package ru.yandex.ya_forms2.services
+package ru.ravel.quizforms.services
 
 import org.springframework.stereotype.Service
-import ru.yandex.ya_forms2.models.*
-import ru.yandex.ya_forms2.reposetores.QuestionsRepository
+import ru.ravel.quizforms.enums.QuestionType
+import ru.ravel.quizforms.entites.*
+import ru.ravel.quizforms.entites.CheckboxQuestion
+import ru.ravel.quizforms.entites.Question
+import ru.ravel.quizforms.entites.RadioQuestion
+import ru.ravel.quizforms.entites.TextQuestion
+import ru.ravel.quizforms.reposetores.QuestionsRepository
 
 @Service
 class QuestionsService(
 	val questionsRepository: QuestionsRepository
 ) {
 
-	fun getGroupOfQuestion(): Set<GroupOfQuestion> {
+	fun getGroupOfQuestion(): List<GroupOfQuestion> {
 		return questionsRepository.getQuestionGroups()
 	}
 
@@ -44,7 +49,7 @@ class QuestionsService(
 	}
 
 	fun createQuestion(groupId: Long, type: String): Long {
-		return questionsRepository.createQuestion(groupId, type)
+		return questionsRepository.createQuestion(groupId, QuestionType.valueOf(type.uppercase()))
 	}
 
 	fun questionChanged(groupId: Long, questionId: Long, body: Map<String, String>): Boolean {
@@ -68,8 +73,8 @@ class QuestionsService(
 		return questionsRepository.patchAnswer(answerId, text, isCorrect, score)
 	}
 
-	fun deleteAnswer(questionId: Long, answerId: Long): Boolean {
-		return questionsRepository.deleteAnswer(questionId, answerId)
+	fun deleteAnswer(answerId: Long): Boolean {
+		return questionsRepository.deleteAnswer(answerId)
 	}
 
 	fun groupScoreChanged(groupId: Long, body: Map<String, Any>): Boolean {

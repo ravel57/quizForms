@@ -1,11 +1,12 @@
-package ru.yandex.ya_forms2.controllers
+package ru.ravel.quizforms.controllers
 
 import jakarta.servlet.http.HttpSession
 import org.springframework.http.ProblemDetail
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import ru.yandex.ya_forms2.models.*
-import ru.yandex.ya_forms2.services.QuestionsService
+import ru.ravel.quizforms.entites.*
+import ru.ravel.quizforms.enums.QuestionType
+import ru.ravel.quizforms.services.QuestionsService
 import java.net.HttpURLConnection
 
 
@@ -33,7 +34,7 @@ class ApiController(
 		httpSession: HttpSession
 	): ResponseEntity<Any> {
 		val map = res.map { question: Map<String, Any> ->
-			val questions: HashSet<Question> = HashSet()
+			val questions: ArrayList<Question> = ArrayList()
 			(question["questions"] as List<*>).forEach {
 				when ((it as Map<*, *>)["type"]) {
 					QuestionType.TEXT.name -> questions.add(TextQuestion(it))
@@ -42,7 +43,12 @@ class ApiController(
 				}
 			}
 			questions.forEach { questionsService.fillCorrectAnswer(it) }
-			GroupOfQuestion(id = question["id"] as Int, title = question["title"] as String, questions = questions)
+			GroupOfQuestion(
+				id = question["id"] as Long,
+				title = question["title"] as String,
+				passingScore = 0,
+				questions = questions
+			)
 		}
 		return ResponseEntity.ok().body(map)
 	}
@@ -89,7 +95,6 @@ class ApiController(
 			ResponseEntity.of(ProblemDetail.forStatus(HttpURLConnection.HTTP_NO_CONTENT)).build()
 		} else {
 			ResponseEntity.of(ProblemDetail.forStatus(HttpURLConnection.HTTP_BAD_REQUEST)).build()
-
 		}
 	}
 
@@ -102,8 +107,7 @@ class ApiController(
 		@PathVariable groupId: Long,
 		@RequestBody body: Map<String, String>,
 	): ResponseEntity<Any> {
-		val type = body["type"] ?: ""
-		val id = questionsService.createQuestion(groupId, type)
+		val id = questionsService.createQuestion(groupId, body["type"] ?: "")
 		return if (id > 0) {
 			ResponseEntity.ok().body(mapOf(Pair("id", id)))
 		} else {
@@ -188,7 +192,7 @@ class ApiController(
 		@PathVariable questionId: Long,
 		@PathVariable answerId: Long,
 	): ResponseEntity<Any> {
-		return if (questionsService.deleteAnswer(questionId, answerId)) {
+		return if (questionsService.deleteAnswer(answerId)) {
 			ResponseEntity.of(ProblemDetail.forStatus(HttpURLConnection.HTTP_NO_CONTENT)).build()
 		} else {
 			ResponseEntity.of(ProblemDetail.forStatus(HttpURLConnection.HTTP_BAD_REQUEST)).build()

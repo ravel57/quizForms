@@ -1,11 +1,12 @@
-package ru.yandex.ya_forms2
+package ru.ravel.quizforms
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class YaForms2Application
+class QuizFormsApplication
 
 fun main(args: Array<String>) {
-    runApplication<YaForms2Application>(*args)
+	runApplication<QuizFormsApplication>(*args)
 }

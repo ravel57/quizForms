@@ -1,4 +1,4 @@
-package ru.yandex.ya_forms2.controllers
+package ru.ravel.quizforms.controllers
 
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.CrossOrigin

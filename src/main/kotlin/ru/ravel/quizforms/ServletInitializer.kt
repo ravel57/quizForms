@@ -1,4 +1,4 @@
-package ru.yandex.ya_forms2
+package ru.ravel.quizforms
 
 import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
@@ -6,7 +6,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 class ServletInitializer : SpringBootServletInitializer() {
 
     override fun configure(application: SpringApplicationBuilder): SpringApplicationBuilder {
-        return application.sources(YaForms2Application::class.java)
+        return application.sources(QuizFormsApplication::class.java)
     }
 
 }

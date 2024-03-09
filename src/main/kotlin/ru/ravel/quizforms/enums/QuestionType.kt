@@ -1,4 +1,4 @@
-package ru.yandex.ya_forms2.models
+package ru.ravel.quizforms.enums
 
 enum class QuestionType {
     TEXT,
