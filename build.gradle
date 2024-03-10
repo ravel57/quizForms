@@ -39,7 +39,8 @@ dependencies {
 //	implementation 'org.springframework.boot:spring-jdbc'
 //	implementation 'org.springframework.session:spring-session-jdbc'
 
-	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
+	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.16.1'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.1'
 	implementation 'org.jetbrains.kotlin:kotlin-reflect'
 
 	compileOnly 'org.projectlombok:lombok'
@@ -56,6 +57,7 @@ dependencies {
 	implementation 'org.hibernate:hibernate-core:6.4.4.Final'
 	implementation 'com.querydsl:querydsl-jpa:5.1.0'
 	implementation 'com.querydsl:querydsl-apt:5.1.0'
+
 
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

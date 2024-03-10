@@ -7,12 +7,16 @@ import jakarta.persistence.*
 data class AnswerVariant(
 
 	@Id
+	@Column(name="id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	var id: Long = -1,
 
+	@Column(name="text", length = 1024)
 	var text: String = "",
 
-	var isCorrect: Boolean = false,
+	@Column(name="correct")
+	var correct: Boolean = false,
 
+	@Column(name="score")
 	var score: Int? = null,
 )

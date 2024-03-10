@@ -7,6 +7,9 @@ import org.springframework.boot.runApplication
 @SpringBootApplication
 class QuizFormsApplication
 
+//TODO переделать на netty
+//TODO разбить тесты по ролям
+
 fun main(args: Array<String>) {
 	runApplication<QuizFormsApplication>(*args)
 }

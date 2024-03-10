@@ -1,5 +1,6 @@
 package ru.ravel.quizforms.services
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.stereotype.Service
 import ru.ravel.quizforms.enums.QuestionType
 import ru.ravel.quizforms.entites.*
@@ -22,7 +23,7 @@ class QuestionsService(
 		val correctAnswers = questionsRepository.getCorrectAnswers(question)
 		when (question.type) {
 			QuestionType.TEXT -> {
-				(question as TextQuestion).correctAnswer = correctAnswers.stream().findFirst().orElse(AnswerVariant(0, "", false, 0))
+				(question as TextQuestion).correctAnswers = correctAnswers
 			}
 
 			QuestionType.RADIO -> {
@@ -54,7 +55,7 @@ class QuestionsService(
 
 	fun questionChanged(groupId: Long, questionId: Long, body: Map<String, String>): Boolean {
 		val text = body["text"] ?: ""
-		return questionsRepository.questionChanged(groupId, questionId, text)
+		return questionsRepository.questionChanged(questionId, text)
 	}
 
 	fun deleteQuestion(groupId: Long, questionId: Long): Boolean {
@@ -66,11 +67,9 @@ class QuestionsService(
 	}
 
 	fun patchAnswer(answerId: Long, body: Map<String, Map<String, Any>>): Boolean {
-		val map = body["answer"] ?: mapOf()
-		val text: String = map["text"].toString()
-		val isCorrect: Boolean = map["isCorrect"].toString().toBoolean()
-		val score: Int = map["score"] as Int
-		return questionsRepository.patchAnswer(answerId, text, isCorrect, score)
+		val objectMapper = ObjectMapper()
+		val answerVariant = objectMapper.readValue(objectMapper.writeValueAsString(body["answer"]), AnswerVariant::class.java)
+		return questionsRepository.patchAnswer(answerId, answerVariant)
 	}
 
 	fun deleteAnswer(answerId: Long): Boolean {

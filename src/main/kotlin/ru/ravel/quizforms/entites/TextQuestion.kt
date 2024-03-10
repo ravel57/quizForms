@@ -23,33 +23,18 @@ data class TextQuestion(
 
 	@JsonIgnore
 	@Transient
-	var correctAnswer: AnswerVariant?,
+	var correctAnswers: List<AnswerVariant>?,
 
 	@get:Column(name = "answers")
 	override var answers: MutableList<AnswerVariant>,
 ) : Question() {
 
-	constructor(it: Map<*, *>) : this(
-		id = it["id"] as Long,
-		text = it["text"] as String,
-		type = QuestionType.TEXT,
-		correctAnswer = null,
-		answers = Collections.emptyList()
-	)
-
-
 	constructor() : this(
 		id = -1,
 		text = "",
 		type = QuestionType.TEXT,
-		correctAnswer = null,
+		correctAnswers = null,
 		answers = Collections.emptyList()
 	)
-
-//	override fun isAnswerCorrect(): Boolean {
-//		return correctAnswer?.text == answer
-//	}
-
-
 
 }

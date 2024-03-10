@@ -32,20 +32,6 @@ data class CheckboxQuestion(
 	var correctAnswers: List<AnswerVariant>? = null,
 ) : Question() {
 
-	constructor(it: Map<*, *>) : this(
-		id = it["id"] as Long,
-		text = it["text"] as String,
-		type = QuestionType.CHECKBOX,
-		selectedAnswers = (if (it["selectedAnswers"] == null) listOf<Any>() else it["selectedAnswers"] as List<*>).map {
-			AnswerVariant(
-				id = (it as Map<*, *>)["id"] as Long,
-				text = it["text"] as String,
-				isCorrect = false, //(it["is_correct"] as Boolean) ?:
-				score = 0, //it["score"] as Int,
-			)
-		},
-	)
-
 	constructor() : this(
 		id = -1,
 		text = "",

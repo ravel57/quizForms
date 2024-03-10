@@ -21,12 +21,11 @@ class QuestionsRepository(
 	private val sessionFactory: SessionFactory = factory.unwrap(SessionFactory::class.java)
 
 	fun getQuestionGroups(): List<GroupOfQuestion> {
-		val klass = GroupOfQuestion::class.java
-		val builder = sessionFactory.openSession().criteriaBuilder
-		val query = builder.createQuery(klass)
-		val from = query.from(klass)
+		val criteria = sessionFactory.openSession().criteriaBuilder
+		val query = criteria.createQuery(GroupOfQuestion::class.java)
+		val from = query.from(GroupOfQuestion::class.java)
 		query.select(from)
-//		query.orderBy(builder.asc(from.get("id")))
+		query.orderBy(criteria.asc(from.get<Long>("id")))
 		return sessionFactory.openSession().createQuery(query).resultList
 	}
 
@@ -42,7 +41,7 @@ class QuestionsRepository(
 			AnswerVariant(
 				id = it["id"] as Long,
 				text = it["text"] as String,
-				isCorrect = it["is_correct"] as Boolean,
+				correct = it["correct"] as Boolean,
 				score = (it["score"] ?: 0) as Int,
 			)
 		}
@@ -91,16 +90,16 @@ class QuestionsRepository(
 		val session = sessionFactory.openSession()
 		val groupOfQuestion = session.get(GroupOfQuestion::class.java, groupId)
 		val transaction = session.beginTransaction()
-		session.persist(question)
+		session.save(question)
 		groupOfQuestion.questions.add(question)
 		transaction.commit()
 		session.close()
 		return question.id
 	}
 
-	fun questionChanged(groupId: Long, questionId: Long, text: String): Boolean {
+	fun questionChanged(questionId: Long, text: String): Boolean {
 		val session = sessionFactory.openSession()
-		val question = session.get(GroupOfQuestion::class.java, groupId).questions.find { it.id == questionId }
+		val question = session.get(Question::class.java, questionId)
 		session.beginTransaction()
 		question?.text = text
 		session.merge(question)
@@ -123,20 +122,20 @@ class QuestionsRepository(
 		val session = sessionFactory.openSession()
 		val question = session.get(Question::class.java, questionId)
 		session.beginTransaction()
-		session.persist(answer)
+		session.save(answer)
 		question.answers.add(answer)
 		session.transaction.commit()
 		session.close()
 		return answer.id
 	}
 
-	fun patchAnswer(answerId: Long, text: String, isCorrect: Boolean, score: Int): Boolean {
+	fun patchAnswer(answerId: Long, newAnswerVariant: AnswerVariant): Boolean {
 		val session = sessionFactory.openSession()
 		val answerVariant = session.get(AnswerVariant::class.java, answerId)
 		session.beginTransaction()
-		answerVariant?.text = text
-		answerVariant?.isCorrect = isCorrect
-		answerVariant?.score = score
+		answerVariant?.text = newAnswerVariant.text
+		answerVariant?.correct = newAnswerVariant.correct
+		answerVariant?.score = newAnswerVariant.score
 		session.merge(answerVariant)
 		session.transaction.commit()
 		session.close()
@@ -153,7 +152,14 @@ class QuestionsRepository(
 	}
 
 	fun groupScoreChanged(groupId: Long, score: Int): Boolean {
-		return jdbcTemplate.update("UPDATE question_group SET passing_score = $score WHERE id = $groupId") == 1
+		val session = sessionFactory.openSession()
+		session.beginTransaction()
+		val groupOfQuestion = session.get(GroupOfQuestion::class.java, groupId)
+		groupOfQuestion.passingScore = score
+		session.merge(groupOfQuestion)
+		session.transaction.commit()
+		session.close()
+		return true
 	}
 
 }

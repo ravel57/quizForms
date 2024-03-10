@@ -1,6 +1,6 @@
 package ru.ravel.quizforms.controllers
 
-import jakarta.servlet.http.HttpSession
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.http.ProblemDetail
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -31,22 +31,27 @@ class ApiController(
 	)
 	fun getAnswersFromRespondent(
 		@RequestBody res: Array<Map<String, Any>>,
-		httpSession: HttpSession
 	): ResponseEntity<Any> {
-		val map = res.map { question: Map<String, Any> ->
+		val map = res.map { question ->
 			val questions: ArrayList<Question> = ArrayList()
 			(question["questions"] as List<*>).forEach {
+				val objectMapper = ObjectMapper()
 				when ((it as Map<*, *>)["type"]) {
-					QuestionType.TEXT.name -> questions.add(TextQuestion(it))
-					QuestionType.CHECKBOX.name -> questions.add(CheckboxQuestion(it))
-					QuestionType.RADIO.name -> questions.add(RadioQuestion(it))
+					QuestionType.TEXT.name -> {
+						questions.add(objectMapper.readValue(objectMapper.writeValueAsString(it), TextQuestion::class.java))
+					}
+					QuestionType.CHECKBOX.name -> {
+						questions.add(objectMapper.readValue(objectMapper.writeValueAsString(it), CheckboxQuestion::class.java))
+					}
+					QuestionType.RADIO.name ->
+						questions.add(objectMapper.readValue(objectMapper.writeValueAsString(it), RadioQuestion::class.java))
 				}
 			}
-			questions.forEach { questionsService.fillCorrectAnswer(it) }
+//			questions.forEach { questionsService.fillCorrectAnswer(it) }
 			GroupOfQuestion(
-				id = question["id"] as Long,
+				id =  question["id"].toString().toLong(),
 				title = question["title"] as String,
-				passingScore = 0,
+				passingScore = question["passingScore"] as Int?,
 				questions = questions
 			)
 		}

@@ -32,19 +32,6 @@ data class RadioQuestion(
 	override var answers: MutableList<AnswerVariant>,
 ) : Question() {
 
-	constructor(it: Map<*, *>) : this(
-		id = it["id"] as Long,
-		text = it["text"] as String,
-		type = QuestionType.RADIO,
-		selectedAnswer = if (it["selectedAnswer"] == null) null else AnswerVariant(
-			id = (it["selectedAnswer"] as Map<*, *>)["id"] as Long,
-			text = (it["selectedAnswer"] as Map<*, *>)["text"] as String,
-			isCorrect = false,//it["is_correct"] as Boolean,
-			score = 0,//it["score"] as Int,
-		),
-		answers = Collections.emptyList()
-	)
-
 	constructor() : this(
 		id = -1,
 		text = "",

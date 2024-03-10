@@ -19,7 +19,7 @@ data class GroupOfQuestion(
 	@Column(name = "passing_score")
 	var passingScore: Int? = null,
 
-	@OneToMany(cascade = [CascadeType.ALL])
+	@OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "question_group")
 	var questions: MutableList<Question> = Collections.emptyList(),
