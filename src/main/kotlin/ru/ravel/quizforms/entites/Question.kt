@@ -22,7 +22,7 @@ abstract class Question {
 	@get:Convert(converter = TypeConverter::class)
 	abstract var type: QuestionType
 
-	@get:OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true)
+	@get:OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.EAGER, targetEntity = AnswerVariant::class)
 	@get:OnDelete(action = OnDeleteAction.CASCADE)
 	@get:JoinColumn(name = "question")
 	abstract var answers: MutableList<AnswerVariant>

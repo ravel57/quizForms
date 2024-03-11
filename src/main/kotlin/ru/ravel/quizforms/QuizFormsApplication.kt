@@ -9,6 +9,7 @@ class QuizFormsApplication
 
 //TODO переделать на netty
 //TODO разбить тесты по ролям
+//TODO ассинхронность, реактивность
 
 fun main(args: Array<String>) {
 	runApplication<QuizFormsApplication>(*args)

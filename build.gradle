@@ -10,7 +10,7 @@ plugins {
 	id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10'
 }
 
-group = 'ru.yandex'
+group = 'ru.ravel'
 version = '1'
 
 java {
@@ -51,7 +51,7 @@ dependencies {
 	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
 	implementation 'javax.servlet:jstl:1.2'
 	implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:2.0.0'
-	implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'
+	implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.0'
 
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	implementation 'org.hibernate:hibernate-core:6.4.4.Final'
