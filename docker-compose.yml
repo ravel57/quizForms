@@ -14,7 +14,7 @@ services:
     build: .
     restart: always
     ports:
-      - '8080:8080'
+      - '56483:8080'
     links:
       - postgres:postgres
     environment:
