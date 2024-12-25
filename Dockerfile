@@ -1,4 +1,5 @@
 FROM gradle:8.7.0-jdk17 AS gradle
+COPY --chown=gradle:gradle . /home/gradle/
 WORKDIR /home/gradle/
 RUN ["gradle", "war"]
 
