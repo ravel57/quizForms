@@ -9,15 +9,14 @@ import org.springframework.web.servlet.view.JstlView
 @Configuration
 class ConfigJSP {
 
-    @Bean
-    fun getViewResolver(): ViewResolver {
-        val resolver = InternalResourceViewResolver()
-        resolver.setPrefix("/WEB-INF/views/")
-        resolver.setSuffix(".jsp")
-        resolver.setViewClass(JstlView::class.java)
-        return resolver
-    }
-
+	@Bean
+	fun getViewResolver(): ViewResolver {
+		val resolver = InternalResourceViewResolver()
+		resolver.setPrefix("/WEB-INF/views/")
+		resolver.setSuffix(".jsp")
+		resolver.setViewClass(JstlView::class.java)
+		return resolver
+	}
 
 
 }

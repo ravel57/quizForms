@@ -1,0 +1,16 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/quiz_forms}
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    generate-ddl: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  session:
+    jdbc:
+      initialize-schema: always

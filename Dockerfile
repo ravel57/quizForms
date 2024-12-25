@@ -1,6 +1,8 @@
-FROM gradle:8.6.0-jdk17 AS gradle
-EXPOSE 8082
-COPY --chown=gradle:gradle . /home/gradle/
+FROM gradle:8.7.0-jdk17 AS gradle
 WORKDIR /home/gradle/
-RUN gradle bootJar
-CMD ["java", "-jar", "build/libs/quizForms-1.jar"]
+RUN ["gradle", "war"]
+
+FROM tomcat:10.1.23-jre21 AS tomcat9
+COPY --from=gradle /home/gradle/build/libs/*.war /usr/local/tomcat/webapps/ROOT.war
+CMD chmod +x /usr/local/tomcat/bin/catalina.sh
+CMD ["catalina.sh", "run"]
